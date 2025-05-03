@@ -1,14 +1,12 @@
-const { method } = require("lodash")
-
 document.querySelector('button').addEventListener('click', getRecipe)
-document.querySelector('.saveDish').addEventListener('click', saveRecipe)
+document.querySelector('#saveDish').addEventListener('click', saveRecipe)
 let mealName = document.querySelector('h2')
 let mealImage = document.querySelector('img')
 let mealSource = document.querySelector('a')
 
 
 function saveRecipe() {
-    fetch('saverecipes', {
+    fetch('/saverecipes', {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

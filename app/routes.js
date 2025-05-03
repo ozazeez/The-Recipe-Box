@@ -39,11 +39,18 @@ app.get('/recipes', isLoggedIn, function(req, res) {
   })
 });
 
-    app.post('/saverecipes', (req, res) => {
+    app.put('/saverecipes', (req, res) => {
+        console.log(req.body)
       db.collection('recipes').save({name: req.body.name, img: req.body.img, card: req.body.card, thumbUp: 0, thumbDown:0}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
-        res.redirect('/profile')
+        db.collection('recipes').find().toArray((err, result) => {
+            if (err) return console.log(err)
+            res.render('profile.ejs', {
+              user : req.user,
+              recipes: result
+            })
+          })
       })
     })
 
