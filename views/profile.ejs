@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>21 Savage Fan Site</title>
+    <title>Recipe Box</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
@@ -12,6 +12,7 @@
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/recipes" class="btn btn-default btn-sm">Find a recipe</a>
     </div>
 
     <div class="row">
@@ -36,13 +37,13 @@
             </div>
         </div>
         <div class="col-sm-6">
-          <h3>Messages</h3>
-          <ul class="messages">
-          <% for(var i=0; i<messages.length; i++) {%>
-            <li class="message">
-              <span><%= messages[i].name %></span>
-              <span><%= messages[i].msg %></span>
-              <span><%= messages[i].thumbUp %></span>
+          <h2>Cook Book</h2>
+          <ul class="recipes">
+          <% for(var i=0; i<recipes.length; i++) {%>
+            <li class="recipe">
+              <span><%= recipes[i].name %></span>
+              <span><%= recipes[i].msg %></span>
+              <span><%= recipes[i].thumbUp %></span>
               <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
               <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
               <span><i class="fa fa-trash" aria-hidden="true"></i></span>
@@ -50,16 +51,16 @@
           <% } %>
           </ul>
 
-          <h2>Add a message</h2>
+          <!-- <h3>Add a recipe</h3>
         <% if (user.local.email) { %>
-          <form action="/messages" method="POST">
+          <form action="/recipes" method="POST">
             <input type="text" value="<%= user.local.email %>" name="name">
-            <input type="text" placeholder="message" name="msg">
+            <input type="text" placeholder="recipe" name="msg">
             <button type="submit">Submit</button>
           </form>
         </div>
-        <% } %>
-
+        <% } %> -->
+   
 </div>
 
 <script src="main.js"></script>

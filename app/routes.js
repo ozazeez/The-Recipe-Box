@@ -1,4 +1,4 @@
-module.exports = function(app, passport, db) {
+module.exports = function(app, passport, db, axios) {
 
 // normal routes ===============================================================
 
@@ -9,11 +9,11 @@ module.exports = function(app, passport, db) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
-        db.collection('messages').find().toArray((err, result) => {
+        db.collection('recipes').find().toArray((err, result) => {
           if (err) return console.log(err)
           res.render('profile.ejs', {
             user : req.user,
-            messages: result
+            recipes: result
           })
         })
     });
@@ -26,54 +26,70 @@ module.exports = function(app, passport, db) {
         res.redirect('/');
     });
 
-// message board routes ===============================================================
+// recipe board routes ===============================================================
+app.get('/recipes', isLoggedIn, function(req, res) {
+  db.collection('recipes').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    res.render('recipes.ejs'
+    //   , {
+    //   user : req.user,
+    //   recipes: result
+    // }
+  )
+  })
+});
 
-    app.post('/messages', (req, res) => {
-      db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+    app.post('/saverecipes', (req, res) => {
+      db.collection('recipes').save({name: req.body.name, img: req.body.img, card: req.body.card, thumbUp: 0, thumbDown:0}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
         res.redirect('/profile')
       })
     })
 
-    app.put('/messages', (req, res) => {
-      db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
-        $set: {
-          thumbUp:req.body.thumbUp + 1
-        }
-      }, {
-        sort: {_id: -1},
-        upsert: true
-      }, (err, result) => {
-        if (err) return res.send(err)
-        res.send(result)
-      })
-    })
+// axios
 
-    // app.put('/down', (req, res) => {
-    //   db.collection('messages')
-    //     .findOneAndUpdate({ name: req.body.name, msg: req.body.msg}, {
-    //       $set: {
-    //         thumbUp: req.body.thumbUp - 1
-    //       }
-    //     }, {
-    //       sort: { _id: -1 },
-    //       upsert: true
-    //     }, (err, result) => {
-    //       if (err) return res.send(err)
-    //       res.send(result)
-    //     })
+
+
+    // app.put('/recipes', (req, res) => {
+    //   db.collection('recipes')
+    //   .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+    //     $set: {
+    //       thumbUp:req.body.thumbUp + 1
+    //     }
+    //   }, {
+    //     sort: {_id: -1},
+    //     upsert: true
+    //   }, (err, result) => {
+    //     if (err) return res.send(err)
+    //     res.send(result)
+    //   })
     // })
-
-    // app.delete('/messages', (req, res) => {
-    //   db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
-    //     if (err) return res.send(500, err)
-    //     res.send('Message deleted!')
+    // app.post('/recipes', (req, res) => {
+    //   db.collection('recipes').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+    //     if (err) return console.log(err)
+    //     console.log('saved to database')
+    //     res.redirect('/profile')
     //   })
     // })
 
-    
+    // app.put('/recipes', (req, res) => {
+    //   db.collection('recipes')
+    //   .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+    //     $set: {
+    //       thumbUp:req.body.thumbUp + 1
+    //     }
+    //   }, {
+    //     sort: {_id: -1},
+    //     upsert: true
+    //   }, (err, result) => {
+    //     if (err) return res.send(err)
+    //     res.send(result)
+    //   })
+    // })
+
+  
+
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -90,7 +106,7 @@ module.exports = function(app, passport, db) {
         app.post('/login', passport.authenticate('local-login', {
             successRedirect : '/profile', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
+            failureFlash : true // allow flash recipes
         }));
 
         // SIGNUP =================================
@@ -103,7 +119,7 @@ module.exports = function(app, passport, db) {
         app.post('/signup', passport.authenticate('local-signup', {
             successRedirect : '/profile', // redirect to the secure profile section
             failureRedirect : '/signup', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
+            failureFlash : true // allow flash recipes
         }));
 
 // =============================================================================

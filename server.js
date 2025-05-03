@@ -3,9 +3,10 @@
 
 // set up ======================================================================
 // get all the tools we need
+const axios = require('axios');
 var express  = require('express');
 var app      = express();
-var port     = process.env.PORT || 8080;
+var port     = process.env.PORT || 8000;
 const MongoClient = require('mongodb').MongoClient
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -15,6 +16,9 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
+
+
+// console.log(axios.isCancel('something'));
 
 var configDB = require('./config/database.js');
 
@@ -47,32 +51,16 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(flash()); // use connect-flash for flash recipes stored in session
 
 
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
 
-
-app.put('/down', (req, res) => {
-  db.collection('messages')
-    .findOneAndUpdate({ name: req.body.name, msg: req.body.msg}, {
-      $set: {
-        thumbUp: req.body.thumbUp - 1
-      }
-    }, {
-      sort: { _id: -1 },
-      upsert: true
-    }, (err, result) => {
-      if (err) return res.send(err)
-      res.send(result)
-    })
-})
-
-app.delete('/messages', (req, res) => {
-  db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+app.delete('/recipes', (req, res) => {
+  db.collection('recipes').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
     if (err) return res.send(500, err)
-    res.send('Message deleted!')
+    res.send('Recipe deleted!')
   })
 })
