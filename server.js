@@ -18,8 +18,6 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
 
-// console.log(axios.isCancel('something'));
-
 var configDB = require('./config/database.js');
 
 var db
@@ -59,7 +57,7 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 app.delete('/recipes', (req, res) => {
-  db.collection('recipes').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+  db.collection('recipes').findOneAndDelete({name: req.body.name}, (err, result) => {
     if (err) return res.send(500, err)
     res.send('Recipe deleted!')
   })
