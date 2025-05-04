@@ -9,7 +9,8 @@ module.exports = function (app, passport, db, axios) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function (req, res) {
-        db.collection('recipes').find().toArray((err, result) => {
+        var userId = req.user._id
+        db.collection('recipes').find({ userId: userId }).toArray((err, result) => {
             if (err) return console.log(err)
             res.render('profile.ejs', {
                 user: req.user,
@@ -33,9 +34,10 @@ module.exports = function (app, passport, db, axios) {
             res.render('recipes.ejs')
         })
     });
-    app.put('/saverecipes', (req, res) => {
+    app.put('/saverecipes', isLoggedIn, (req, res) => {
+        var userId = req.user._id
         console.log(req.body)
-        db.collection('recipes').save({ name: req.body.name, img: req.body.img, card: req.body.card}, (err, result) => {
+        db.collection('recipes').save({ userId: userId, name: req.body.name, img: req.body.img, card: req.body.card}, (err, result) => {
             if (err) return console.log(err)
             console.log('saved to database')
         })
