@@ -57,7 +57,8 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 app.delete('/recipes', (req, res) => {
-  db.collection('recipes').findOneAndDelete({name: req.body.name}, (err, result) => {
+  var userId = req.user._id
+  db.collection('recipes').findOneAndDelete({name: req.body.name, userId: userId}, (err, result) => {
     if (err) return res.send(500, err)
     res.send('Recipe deleted!')
   })
