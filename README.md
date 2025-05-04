@@ -1,10 +1,5 @@
 ## The Recipe Box
 
-
-
-
-
-
 ## Installation
 
 1. Clone repo
